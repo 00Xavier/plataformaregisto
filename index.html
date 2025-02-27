@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo Erros Teletrabalho</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="NewSpring Services powered by CTT">
+            <h1>REGISTO ERROS TELETRABALHO</h1>
+        </header>
+        <form id="errorForm">
+            <input type="date" id="data" placeholder="Data">
+            <input type="text" id="user" placeholder="User">
+            <input type="time" id="hora_inicio" placeholder="Hora Início">
+            <input type="time" id="hora_fim" placeholder="Hora Fim">
+            <input type="text" id="evento" placeholder="Evento">
+            <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="text" id="responsabilidade" placeholder="Responsabilidade">
+            <input type="text" id="causa" placeholder="Causa">
+            <input type="text" id="acao" placeholder="Ação Desenvolvida">
+            <input type="text" id="observacoes" placeholder="Observações">
+            <button type="button" onclick="salvarDados()">Submeter</button>
+        </form>
+        <button onclick="exportarCSV()">Extrair CSV</button>
+    </div>
+    <script>
+        let dados = [];
+        
+        function salvarDados() {
+            let registro = {
+                data: document.getElementById('data').value,
+                user: document.getElementById('user').value,
+                hora_inicio: document.getElementById('hora_inicio').value,
+                hora_fim: document.getElementById('hora_fim').value,
+                evento: document.getElementById('evento').value,
+                tipo_evento: document.getElementById('tipo_evento').value,
+                descricao: document.getElementById('descricao').value,
+                responsabilidade: document.getElementById('responsabilidade').value,
+                causa: document.getElementById('causa').value,
+                acao: document.getElementById('acao').value,
+                observacoes: document.getElementById('observacoes').value
+            };
+            dados.push(registro);
+            alert('Dados salvos com sucesso!');
+        }
+        
+        function exportarCSV() {
+            let csvContent = "data:text/csv;charset=utf-8," + Object.keys(dados[0]).join(";") + "\n";
+            dados.forEach(row => {
+                csvContent += Object.values(row).join(";") + "\n";
+            });
+            
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "registo_erros.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+    </script>
+</body>
+</html>
