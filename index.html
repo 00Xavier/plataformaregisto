@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
         // Configurar Supabase (substituir pelos teus dados)
-        const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
+        const SUPABASE_URL = "TUA_SUPABASE_URL";
+        const SUPABASE_ANON_KEY = "TUA_SUPABASE_ANON_KEY";
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
@@ -29,12 +29,15 @@
                 observacoes: document.getElementById('observacoes').value
             };
 
+            console.log("Enviando dados para o Supabase:", registro);
+            
             let { data, error } = await supabase.from('registos').insert([registro]);
 
             if (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar os dados.");
+                alert("Erro ao salvar os dados. Verifique o console para mais detalhes.");
             } else {
+                console.log("Dados salvos com sucesso:", data);
                 alert("Dados salvos com sucesso!");
             }
         }
@@ -84,3 +87,4 @@
     </div>
 </body>
 </html>
+
