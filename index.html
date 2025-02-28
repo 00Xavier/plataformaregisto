@@ -5,12 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo Erros Teletrabalho</title>
     <link rel="stylesheet" href="styles.css">
-
+    
+    <!-- Importar Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
+        // Configurar Supabase (substituir pelos teus dados)
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function salvarDados() {
+            let registro = {
+                data: document.getElementById('data').value,
+                user: document.getElementById('user').value,
+                hora_inicio: document.getElementById('hora_inicio').value,
+                hora_fim: document.getElementById('hora_fim').value,
+                evento: document.getElementById('evento').value,
+                tipo_evento: document.getElementById('tipo_evento').value,
+                descricao: document.getElementById('descricao').value,
+                responsabilidade: document.getElementById('responsabilidade').value,
+                causa: document.getElementById('causa').value,
+                acao: document.getElementById('acao').value,
+                observacoes: document.getElementById('observacoes').value
+            };
+
+            let { data, error } = await supabase.from('registos').insert([registro]);
+
+            if (error) {
+                console.error("Erro ao salvar:", error);
+                alert("Erro ao salvar os dados.");
+            } else {
+                alert("Dados salvos com sucesso!");
+            }
+        }
+
+        async function exportarCSV() {
+            let { data, error } = await supabase.from('registos').select('*');
+            if (error) {
+                console.error("Erro ao exportar:", error);
+                alert("Erro ao exportar os dados.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8," + 
+                Object.keys(data[0]).join(";") + "\n" + 
+                data.map(row => Object.values(row).join(";")).join("\n");
+
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "registos.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
     </script>
 </head>
 <body>
@@ -35,48 +82,5 @@
         </form>
         <button onclick="exportarCSV()">Extrair CSV</button>
     </div>
-    <script>
-        let dados = [];
-        
-async function salvarDados() {
-    let registro = {
-        data: document.getElementById('data').value,
-        user: document.getElementById('user').value,
-        hora_inicio: document.getElementById('hora_inicio').value,
-        hora_fim: document.getElementById('hora_fim').value,
-        evento: document.getElementById('evento').value,
-        tipo_evento: document.getElementById('tipo_evento').value,
-        descricao: document.getElementById('descricao').value,
-        responsabilidade: document.getElementById('responsabilidade').value,
-        causa: document.getElementById('causa').value,
-        acao: document.getElementById('acao').value,
-        observacoes: document.getElementById('observacoes').value
-    };
-
-    let { data, error } = await supabase.from('registos').insert([registro]);
-
-    if (error) {
-        console.error("Erro ao salvar:", error);
-        alert("Erro ao salvar os dados.");
-    } else {
-        alert("Dados salvos com sucesso!");
-    }
-}
-
-        
-        function exportarCSV() {
-            let csvContent = "data:text/csv;charset=utf-8," + Object.keys(dados[0]).join(";") + "\n";
-            dados.forEach(row => {
-                csvContent += Object.values(row).join(";") + "\n";
-            });
-            
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "registo_erros.csv");
-            document.body.appendChild(link);
-            link.click();
-        }
-    </script>
 </body>
 </html>
