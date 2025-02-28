@@ -38,23 +38,31 @@
     <script>
         let dados = [];
         
-        function salvarDados() {
-            let registro = {
-                data: document.getElementById('data').value,
-                user: document.getElementById('user').value,
-                hora_inicio: document.getElementById('hora_inicio').value,
-                hora_fim: document.getElementById('hora_fim').value,
-                evento: document.getElementById('evento').value,
-                tipo_evento: document.getElementById('tipo_evento').value,
-                descricao: document.getElementById('descricao').value,
-                responsabilidade: document.getElementById('responsabilidade').value,
-                causa: document.getElementById('causa').value,
-                acao: document.getElementById('acao').value,
-                observacoes: document.getElementById('observacoes').value
-            };
-            dados.push(registro);
-            alert('Dados salvos com sucesso!');
-        }
+async function salvarDados() {
+    let registro = {
+        data: document.getElementById('data').value,
+        user: document.getElementById('user').value,
+        hora_inicio: document.getElementById('hora_inicio').value,
+        hora_fim: document.getElementById('hora_fim').value,
+        evento: document.getElementById('evento').value,
+        tipo_evento: document.getElementById('tipo_evento').value,
+        descricao: document.getElementById('descricao').value,
+        responsabilidade: document.getElementById('responsabilidade').value,
+        causa: document.getElementById('causa').value,
+        acao: document.getElementById('acao').value,
+        observacoes: document.getElementById('observacoes').value
+    };
+
+    let { data, error } = await supabase.from('registos').insert([registro]);
+
+    if (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar os dados.");
+    } else {
+        alert("Dados salvos com sucesso!");
+    }
+}
+
         
         function exportarCSV() {
             let csvContent = "data:text/csv;charset=utf-8," + Object.keys(dados[0]).join(";") + "\n";
