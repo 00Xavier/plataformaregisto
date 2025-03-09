@@ -13,7 +13,8 @@
     <script>
         // Configurar Supabase
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
+        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; // Mova esta chave para o servidor
+
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
@@ -36,7 +37,7 @@
             let { data, error } = await supabase.from('registos').insert([registro]);
 
             if (error) {
-                console.error("Erro ao salvar:", error);
+                console.error("Erro ao salvar:", error.message);
                 alert("Erro ao salvar os dados. Verifique o console para mais detalhes.");
             } else {
                 console.log("Dados salvos com sucesso:", data);
@@ -47,7 +48,7 @@
         async function exportarCSV() {
             let { data, error } = await supabase.from('registos').select('*');
             if (error) {
-                console.error("Erro ao exportar:", error);
+                console.error("Erro ao exportar:", error.message);
                 alert("Erro ao exportar os dados.");
                 return;
             }
@@ -70,11 +71,11 @@
             <h1>REGISTO ERROS TELETRABALHO</h1>
         </header>
         <form id="errorForm">
-            <input type="date" id="data" placeholder="Data">
-            <input type="text" id="user" placeholder="User">
-            <input type="time" id="hora_inicio" placeholder="Hora Início">
-            <input type="time" id="hora_fim" placeholder="Hora Fim">
-            <select id="evento">
+            <input type="date" id="data" placeholder="Data" aria-label="Data">
+            <input type="text" id="user" placeholder="Usuário" aria-label="Usuário">
+            <input type="time" id="hora_inicio" placeholder="Hora Início" aria-label="Hora Início">
+            <input type="time" id="hora_fim" placeholder="Hora Fim" aria-label="Hora Fim">
+            <select id="evento" aria-label="Evento">
                 <option value="Aplicações">Aplicações</option>
                 <option value="OneAgentWeb">OneAgentWeb</option>
                 <option value="Luz">Luz</option>
@@ -82,18 +83,18 @@
                 <option value="PC">PC</option>
                 <option value="VDI">VDI</option>
             </select>
-            <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
-            <input type="text" id="descricao" placeholder="Descrição">
-            <select id="responsabilidade">
-                <option value="User">User</option>
+            <input type="text" id="tipo_evento" placeholder="Tipologia de Evento" aria-label="Tipologia de Evento">
+            <input type="text" id="descricao" placeholder="Descrição" aria-label="Descrição">
+            <select id="responsabilidade" aria-label="Responsabilidade">
+                <option value="User">Usuário</option>
                 <option value="PC">PC</option>
                 <option value="NSS">NSS</option>
                 <option value="FID">FID</option>
                 <option value="N/a">N/a</option>
             </select>
-            <input type="text" id="causa" placeholder="Causa">
-            <input type="text" id="acao" placeholder="Ação Desenvolvida">
-            <input type="text" id="observacoes" placeholder="Observações">
+            <input type="text" id="causa" placeholder="Causa" aria-label="Causa">
+            <input type="text" id="acao" placeholder="Ação Desenvolvida" aria-label="Ação Desenvolvida">
+            <input type="text" id="observacoes" placeholder="Observações" aria-label="Observações">
             <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
         </form>
         <button onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
