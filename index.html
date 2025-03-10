@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo Erros Teletrabalho</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <div class="container">
@@ -63,11 +64,62 @@
                 </div>
                 <div class="button-row">
                     <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                    <button onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                    <button type="button" onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
                 </div>
             </form>
         </div>
     </div>
+
+    <script>
+        const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function salvarDados() {
+            let registro = {
+                data: document.getElementById('data').value,
+                user: document.getElementById('user').value,
+                hora_inicio: document.getElementById('hora_inicio').value,
+                hora_fim: document.getElementById('hora_fim').value,
+                evento: document.getElementById('evento').value,
+                tipo_evento: document.getElementById('tipo_evento').value,
+                descricao: document.getElementById('descricao').value,
+                responsabilidade: document.getElementById('responsabilidade').value,
+                causa: document.getElementById('causa').value,
+                acao: document.getElementById('acao').value,
+                observacoes: document.getElementById('observacoes').value
+            };
+
+            let { data, error } = await supabase.from('registos').insert([registro]);
+
+            if (error) {
+                alert("Erro ao salvar os dados. Verifique o console para mais detalhes.");
+                console.error("Erro ao salvar:", error);
+            } else {
+                alert("Dados salvos com sucesso!");
+            }
+        }
+
+        async function exportarCSV() {
+            let { data, error } = await supabase.from('registos').select('*');
+            if (error) {
+                alert("Erro ao exportar os dados.");
+                console.error("Erro ao exportar:", error);
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8," + 
+                Object.keys(data[0]).join(";") + "\n" + 
+                data.map(row => Object.values(row).join(";")).join("\n");
+
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "registos.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+    </script>
 </body>
 </html>
 
