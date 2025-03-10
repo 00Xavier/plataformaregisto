@@ -5,96 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo Erros Teletrabalho</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>REGISTO ERROS TELETRABALHO</h1>
         </header>
-        <form id="errorForm">
-            <div class="form-row">
-                <input type="date" id="data" placeholder="Data">
-                <input type="text" id="user" placeholder="User">
-                <input type="time" id="hora_inicio" placeholder="Hora Início">
-                <input type="time" id="hora_fim" placeholder="Hora Fim">
-                <select id="evento">
-                    <option value="Aplicações">Aplicações</option>
-                    <option value="OneAgentWeb">OneAgentWeb</option>
-                    <option value="Luz">Luz</option>
-                    <option value="Internet">Internet</option>
-                    <option value="PC">PC</option>
-                    <option value="VDI">VDI</option>
-                </select>
-                <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
-            </div>
-            <div class="form-row">
-                <input type="text" id="descricao" placeholder="Descrição">
-                <select id="responsabilidade">
-                    <option value="User">User</option>
-                    <option value="PC">PC</option>
-                    <option value="NSS">NSS</option>
-                    <option value="FID">FID</option>
-                    <option value="N/a">N/a</option>
-                </select>
-                <input type="text" id="causa" placeholder="Causa">
-                <input type="text" id="acao" placeholder="Ação Desenvolvida">
-                <input type="text" id="observacoes" placeholder="Observações">
-            </div>
-            <div class="button-row">
-                <button type="button" onclick="salvarDados()">Submeter</button>
-                <button type="button" onclick="exportarCSV()">Exportar CSV</button>
-            </div>
-        </form>
+        <div class="form-container">
+            <form id="errorForm">
+                <div class="form-row">
+                    <input type="date" id="data" placeholder="Data">
+                    <input type="text" id="user" placeholder="User">
+                    <input type="time" id="hora_inicio" placeholder="Hora Início">
+                    <input type="time" id="hora_fim" placeholder="Hora Fim">
+                    <select id="evento">
+                        <option value="Aplicações">Aplicações</option>
+                        <option value="OneAgentWeb">OneAgentWeb</option>
+                        <option value="Luz">Luz</option>
+                        <option value="Internet">Internet</option>
+                        <option value="PC">PC</option>
+                        <option value="VDI">VDI</option>
+                    </select>
+                    <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="descricao" placeholder="Descrição">
+                    <select id="responsabilidade">
+                        <option value="User">User</option>
+                        <option value="PC">PC</option>
+                        <option value="NSS">NSS</option>
+                        <option value="FID">FID</option>
+                        <option value="N/a">N/a</option>
+                    </select>
+                    <input type="text" id="causa" placeholder="Causa">
+                    <input type="text" id="acao" placeholder="Ação Desenvolvida">
+                    <input type="text" id="observacoes" placeholder="Observações">
+                </div>
+                <div class="button-row">
+                    <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
+                    <button onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <script>
-        const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "SEU_ANON_KEY_AQUI";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function salvarDados() {
-            let registro = {
-                data: document.getElementById('data').value,
-                user: document.getElementById('user').value,
-                hora_inicio: document.getElementById('hora_inicio').value,
-                hora_fim: document.getElementById('hora_fim').value,
-                evento: document.getElementById('evento').value,
-                tipo_evento: document.getElementById('tipo_evento').value,
-                descricao: document.getElementById('descricao').value,
-                responsabilidade: document.getElementById('responsabilidade').value,
-                causa: document.getElementById('causa').value,
-                acao: document.getElementById('acao').value,
-                observacoes: document.getElementById('observacoes').value
-            };
-
-            let { data, error } = await supabase.from('registos').insert([registro]);
-
-            if (error) {
-                alert("Erro ao salvar os dados.");
-            } else {
-                alert("Dados salvos com sucesso!");
-            }
-        }
-
-        async function exportarCSV() {
-            let { data, error } = await supabase.from('registos').select('*');
-            if (error) {
-                alert("Erro ao exportar os dados.");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8," + 
-                Object.keys(data[0]).join(";") + "\n" + 
-                data.map(row => Object.values(row).join(";")).join("\n");
-
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "registos.csv");
-            document.body.appendChild(link);
-            link.click();
-        }
-    </script>
 </body>
 </html>
 
