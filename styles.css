@@ -1,115 +1,61 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registo Erros Teletrabalho</title>
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Importar Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-</head>
-<body style="background: url('logo.png') no-repeat center center fixed; background-size: cover;">
-    <script>
-        // Configurar Supabase
-        const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+body {
+    font-family: Arial, sans-serif;
+    background-color: #cfe3b3;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
 
-        async function salvarDados() {
-            let registro = {
-                data: document.getElementById('data').value,
-                user: document.getElementById('user').value,
-                hora_inicio: document.getElementById('hora_inicio').value,
-                hora_fim: document.getElementById('hora_fim').value,
-                evento: document.getElementById('evento').value,
-                tipo_evento: document.getElementById('tipo_evento').value,
-                descricao: document.getElementById('descricao').value,
-                responsabilidade: document.getElementById('responsabilidade').value,
-                causa: document.getElementById('causa').value,
-                acao: document.getElementById('acao').value,
-                observacoes: document.getElementById('observacoes').value
-            };
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-            console.log("Enviando dados para o Supabase:", registro);
-            
-            let { data, error } = await supabase.from('registos').insert([registro]);
+header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
 
-            if (error) {
-                console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar os dados. Verifique o console para mais detalhes.");
-            } else {
-                console.log("Dados salvos com sucesso:", data);
-                alert("Dados salvos com sucesso!");
-            }
-        }
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
 
-        async function exportarCSV() {
-            let { data, error } = await supabase.from('registos').select('*');
-            if (error) {
-                console.error("Erro ao exportar:", error);
-                alert("Erro ao exportar os dados.");
-                return;
-            }
+.form-row input,
+.form-row select {
+    flex: 1;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 
-            let csvContent = "data:text/csv;charset=utf-8," + 
-                Object.keys(data[0]).join(";") + "\n" + 
-                data.map(row => Object.values(row).join(";")).join("\n");
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "registos.csv");
-            document.body.appendChild(link);
-            link.click();
-        }
-    </script>
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+}
 
-    <div class="container">
-        <header>
-            <h1>REGISTO ERROS TELETRABALHO</h1>
-        </header>
-        <form id="errorForm">
-            <div class="form-row">
-                <input type="date" id="data" placeholder="Data">
-                <input type="text" id="user" placeholder="User">
-            </div>
-            <div class="form-row">
-                <input type="time" id="hora_inicio" placeholder="Hora Início">
-                <input type="time" id="hora_fim" placeholder="Hora Fim">
-            </div>
-            <div class="form-row">
-                <select id="evento">
-                    <option value="Aplicações">Aplicações</option>
-                    <option value="OneAgentWeb">OneAgentWeb</option>
-                    <option value="Luz">Luz</option>
-                    <option value="Internet">Internet</option>
-                    <option value="PC">PC</option>
-                    <option value="VDI">VDI</option>
-                </select>
-                <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
-            </div>
-            <input type="text" id="descricao" placeholder="Descrição">
-            <div class="form-row">
-                <select id="responsabilidade">
-                    <option value="User">User</option>
-                    <option value="PC">PC</option>
-                    <option value="NSS">NSS</option>
-                    <option value="FID">FID</option>
-                    <option value="N/a">N/a</option>
-                </select>
-                <input type="text" id="causa" placeholder="Causa">
-            </div>
-            <input type="text" id="acao" placeholder="Ação Desenvolvida">
-            <input type="text" id="observacoes" placeholder="Observações">
-            <div class="button-row">
-                <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                <button onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+button:hover {
+    background-color: #45a049;
+}
 
 
 
