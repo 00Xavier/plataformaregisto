@@ -14,10 +14,19 @@
         <div class="form-container">
             <form id="errorForm">
                 <div class="form-row">
-                    <input type="date" id="data" placeholder="Data">
-                    <input type="text" id="user" placeholder="User">
-                    <input type="time" id="hora_inicio" placeholder="Hora Início">
-                    <input type="time" id="hora_fim" placeholder="Hora Fim">
+                    <label for="data">Data</label>
+                    <input type="date" id="data">
+                    
+                    <label for="user">User</label>
+                    <input type="text" id="user">
+                    
+                    <label for="hora_inicio">Hora Início</label>
+                    <input type="time" id="hora_inicio">
+                    
+                    <label for="hora_fim">Hora Fim</label>
+                    <input type="time" id="hora_fim">
+                    
+                    <label for="evento">Evento</label>
                     <select id="evento">
                         <option value="Aplicações">Aplicações</option>
                         <option value="OneAgentWeb">OneAgentWeb</option>
@@ -26,10 +35,15 @@
                         <option value="PC">PC</option>
                         <option value="VDI">VDI</option>
                     </select>
-                    <input type="text" id="tipo_evento" placeholder="Tipologia de Evento">
+                    
+                    <label for="tipo_evento">Tipologia de Evento</label>
+                    <input type="text" id="tipo_evento">
                 </div>
                 <div class="form-row">
-                    <input type="text" id="descricao" placeholder="Descrição">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao">
+                    
+                    <label for="responsabilidade">Responsabilidade</label>
                     <select id="responsabilidade">
                         <option value="User">User</option>
                         <option value="PC">PC</option>
@@ -37,9 +51,15 @@
                         <option value="FID">FID</option>
                         <option value="N/a">N/a</option>
                     </select>
-                    <input type="text" id="causa" placeholder="Causa">
-                    <input type="text" id="acao" placeholder="Ação Desenvolvida">
-                    <input type="text" id="observacoes" placeholder="Observações">
+                    
+                    <label for="causa">Causa</label>
+                    <input type="text" id="causa">
+                    
+                    <label for="acao">Ação Desenvolvida</label>
+                    <input type="text" id="acao">
+                    
+                    <label for="observacoes">Observações</label>
+                    <input type="text" id="observacoes">
                 </div>
                 <div class="button-row">
                     <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
@@ -50,6 +70,7 @@
     </div>
 </body>
 </html>
+
 
 
 
