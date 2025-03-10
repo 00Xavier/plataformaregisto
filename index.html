@@ -16,7 +16,7 @@
             <form id="errorForm">
                 <div class="form-row">
                     <label for="data">Data</label>
-                    <input type="date" id="data" pattern="\\d{2}/\\d{2}/\\d{4}">
+                    <input type="date" id="data" pattern="\d{2}/\d{2}/\d{4}" placeholder="dd/mm/yyyy">
                     
                     <label for="user">User</label>
                     <input type="text" id="user">
@@ -78,8 +78,11 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
+            let dataInput = document.getElementById('data').value;
+            let formattedDate = dataInput ? dataInput.split('-').reverse().join('/') : '';
+
             let registro = {
-                data: document.getElementById('data').value.split('-').reverse().join('/'), // Formato dd/mm/yyyy
+                data: formattedDate, // Formato dd/mm/yyyy
                 user: document.getElementById('user').value,
                 hora_inicio: document.getElementById('hora_inicio').value,
                 hora_fim: document.getElementById('hora_fim').value,
