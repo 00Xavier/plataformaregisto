@@ -6,6 +6,7 @@
     <title>Registo Erros Teletrabalho</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -66,7 +67,7 @@
                 </div>
                 <div class="button-row">
                     <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                    <button type="button" onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                    <button type="button" onclick="exportarXLS()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
                 </div>
             </form>
         </div>
@@ -105,7 +106,7 @@
             }
         }
 
-        async function exportarCSV() {
+        async function exportarXLS() {
             let { data, error } = await supabase.from('registos').select('*');
             if (error) {
                 alert("Erro ao exportar os dados.");
@@ -113,21 +114,15 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8," +
-                Object.keys(data[0]).join(";") + "\n" +
-                data.map(row => Object.values(row).join(";")).join("\n");
-
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "registos.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            let ws = XLSX.utils.json_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Registos");
+            XLSX.writeFile(wb, "registos.xlsx");
         }
     </script>
 </body>
 </html>
+
 
 
 
