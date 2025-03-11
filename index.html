@@ -118,6 +118,7 @@
         aplicarMascaraHora(document.getElementById('hora_inicio'));
         aplicarMascaraHora(document.getElementById('hora_fim'));
 
+        // Função para salvar os dados no Supabase
         async function salvarDados() {
             let dataInput = document.getElementById('data').value;
             let formattedDate = dataInput ? dataInput.split('-').reverse().join('/') : '';
@@ -126,7 +127,7 @@
             let horaInicio = document.getElementById('hora_inicio').value;
             let horaFim = document.getElementById('hora_fim').value;
 
-            if (!validarHora(horaInicio) {
+            if (!validarHora(horaInicio)) {
                 alert("Por favor, insira a hora de início no formato HH:MM.");
                 return;
             }
@@ -161,10 +162,14 @@
                 document.getElementById('errorForm').reset(); // Limpar formulário
             }
         }
+
+        // Função para exportar os dados como CSV
+        function exportarCSV() {
+            alert("Função exportarCSV ainda não implementada.");
+        }
     </script>
 </body>
 </html>
-
 
 
 
