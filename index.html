@@ -63,6 +63,19 @@
                     
                     <label for="observacoes">Observações</label>
                     <input type="text" id="observacoes">
+                    
+                    <label for="equipa">Equipa</label>
+                    <select id="equipa">
+                        <option value="" selected disabled>Selecione...</option>
+                        <option value="AT">AT</option>
+                        <option value="AU">AU</option>
+                        <option value="CL">CL</option>
+                        <option value="DG">DG</option>
+                        <option value="DT">DT</option>
+                        <option value="MR">MR</option>
+                        <option value="MT">MT</option>
+                        <option value="VE">VE</option>
+                    </select>
                 </div>
                 <div class="button-row">
                     <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
@@ -76,6 +89,21 @@
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Função para garantir o formato de 24 horas
+        function formatarHora24(input) {
+            input.addEventListener('change', function() {
+                let hora = this.value;
+                if (hora) {
+                    let [hh, mm] = hora.split(':');
+                    this.value = `${hh}:${mm}`;
+                }
+            });
+        }
+
+        // Aplicar a função aos campos de hora
+        formatarHora24(document.getElementById('hora_inicio'));
+        formatarHora24(document.getElementById('hora_fim'));
 
         async function salvarDados() {
             let dataInput = document.getElementById('data').value;
@@ -92,7 +120,8 @@
                 responsabilidade: document.getElementById('responsabilidade').value,
                 causa: document.getElementById('causa').value,
                 acao: document.getElementById('acao').value,
-                observacoes: document.getElementById('observacoes').value
+                observacoes: document.getElementById('observacoes').value,
+                equipa: document.getElementById('equipa').value
             };
 
             let { data, error } = await supabase.from('registos').insert([registro]);
