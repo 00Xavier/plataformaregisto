@@ -123,33 +123,35 @@
         }
 
         function exportarXLS() {
-            if (typeof XLSX === 'undefined') {
-                alert("Erro: Biblioteca XLSX não carregada.");
-                return;
-            }
+    if (typeof XLSX === 'undefined') {
+        alert("Erro: A biblioteca XLSX não foi carregada corretamente. Tente recarregar a página.");
+        console.error("Erro: Biblioteca XLSX não carregada.");
+        return;
+    }
 
-            let dados = [{
-                Data: document.getElementById('data')?.value || "",
-                User: document.getElementById('user')?.value || "",
-                "Hora Início": document.getElementById('hora_inicio')?.value || "",
-                "Hora Fim": document.getElementById('hora_fim')?.value || "",
-                Evento: document.getElementById('evento')?.value || "",
-                "Tipologia de Evento": document.getElementById('tipo_evento')?.value || "",
-                Descrição: document.getElementById('descricao')?.value || "",
-                Responsabilidade: document.getElementById('responsabilidade')?.value || "",
-                Causa: document.getElementById('causa')?.value || "",
-                "Ação Desenvolvida": document.getElementById('acao')?.value || "",
-                Observações: document.getElementById('observacoes')?.value || "",
-                Equipa: document.getElementById('equipa')?.value || ""
-            }];
+    let dados = [{
+        Data: document.getElementById('data')?.value || "",
+        User: document.getElementById('user')?.value || "",
+        "Hora Início": document.getElementById('hora_inicio')?.value || "",
+        "Hora Fim": document.getElementById('hora_fim')?.value || "",
+        Evento: document.getElementById('evento')?.value || "",
+        "Tipologia de Evento": document.getElementById('tipo_evento')?.value || "",
+        Descrição: document.getElementById('descricao')?.value || "",
+        Responsabilidade: document.getElementById('responsabilidade')?.value || "",
+        Causa: document.getElementById('causa')?.value || "",
+        "Ação Desenvolvida": document.getElementById('acao')?.value || "",
+        Observações: document.getElementById('observacoes')?.value || "",
+        Equipa: document.getElementById('equipa')?.value || ""
+    }];
 
-            console.log("Dados exportados:", dados);
+    console.log("Dados exportados:", dados);
 
-            let wb = XLSX.utils.book_new();
-            let ws = XLSX.utils.json_to_sheet(dados);
-            XLSX.utils.book_append_sheet(wb, ws, "Registos");
-            XLSX.writeFile(wb, "Registos.xlsx");
-        }
+    let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.json_to_sheet(dados);
+    XLSX.utils.book_append_sheet(wb, ws, "Registos");
+    XLSX.writeFile(wb, "Registos.xlsx");
+}
+
     </script>
 </body>
 </html>
