@@ -91,21 +91,22 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Função para garantir o formato de 24 horas
-        function formatarHora24(input) {
+        function garantirFormato24h(input) {
             input.addEventListener('change', function() {
                 let hora = this.value;
                 if (hora) {
-                    // Garantir que o valor esteja no formato HH:MM
+                    // Converte o valor para o formato de 24 horas
                     let [hh, mm] = hora.split(':');
-                    if (hh.length === 1) hh = '0' + hh; // Adiciona zero à esquerda se necessário
-                    this.value = `${hh}:${mm}`;
+                    hh = parseInt(hh, 10); // Converte para número
+                    if (hh < 10) hh = '0' + hh; // Adiciona zero à esquerda se necessário
+                    this.value = `${hh}:${mm}`; // Define o valor no formato HH:MM
                 }
             });
         }
 
         // Aplicar a função aos campos de hora
-        formatarHora24(document.getElementById('hora_inicio'));
-        formatarHora24(document.getElementById('hora_fim'));
+        garantirFormato24h(document.getElementById('hora_inicio'));
+        garantirFormato24h(document.getElementById('hora_fim'));
 
         async function salvarDados() {
             let dataInput = document.getElementById('data').value;
