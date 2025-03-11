@@ -6,7 +6,6 @@
     <title>Registo Erros Teletrabalho</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/SheetJS/0.17.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,7 +16,7 @@
             <form id="errorForm">
                 <div class="form-row">
                     <label for="data">Data</label>
-                    <input type="date" id="data" placeholder="dd/mm/yyyy">
+                    <input type="date" id="data" pattern="\d{2}/\d{2}/\d{4}" placeholder="dd/mm/yyyy">
                     
                     <label for="user">User</label>
                     <input type="text" id="user">
@@ -80,14 +79,13 @@
                 </div>
                 <div class="button-row">
                     <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                    <button type="button" onclick="exportarXLS()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                    <button type="button" onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Configuração do Supabase
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -122,38 +120,37 @@
             }
         }
 
-        function exportarXLS() {
-    if (typeof XLSX === 'undefined') {
-        alert("Erro: A biblioteca XLSX não foi carregada corretamente. Tente recarregar a página.");
-        console.error("Erro: Biblioteca XLSX não carregada.");
-        return;
-    }
+        function exportarCSV() {
+            let dados = [
+                ["Data", "User", "Hora Início", "Hora Fim", "Evento", "Tipologia de Evento", "Descrição", "Responsabilidade", "Causa", "Ação Desenvolvida", "Observações", "Equipa"],
+                [
+                    document.getElementById('data').value,
+                    document.getElementById('user').value,
+                    document.getElementById('hora_inicio').value,
+                    document.getElementById('hora_fim').value,
+                    document.getElementById('evento').value,
+                    document.getElementById('tipo_evento').value,
+                    document.getElementById('descricao').value,
+                    document.getElementById('responsabilidade').value,
+                    document.getElementById('causa').value,
+                    document.getElementById('acao').value,
+                    document.getElementById('observacoes').value,
+                    document.getElementById('equipa').value
+                ]
+            ];
 
-    let dados = [{
-        Data: document.getElementById('data')?.value || "",
-        User: document.getElementById('user')?.value || "",
-        "Hora Início": document.getElementById('hora_inicio')?.value || "",
-        "Hora Fim": document.getElementById('hora_fim')?.value || "",
-        Evento: document.getElementById('evento')?.value || "",
-        "Tipologia de Evento": document.getElementById('tipo_evento')?.value || "",
-        Descrição: document.getElementById('descricao')?.value || "",
-        Responsabilidade: document.getElementById('responsabilidade')?.value || "",
-        Causa: document.getElementById('causa')?.value || "",
-        "Ação Desenvolvida": document.getElementById('acao')?.value || "",
-        Observações: document.getElementById('observacoes')?.value || "",
-        Equipa: document.getElementById('equipa')?.value || ""
-    }];
-
-    console.log("Dados exportados:", dados);
-
-    let wb = XLSX.utils.book_new();
-    let ws = XLSX.utils.json_to_sheet(dados);
-    XLSX.utils.book_append_sheet(wb, ws, "Registos");
-    XLSX.writeFile(wb, "Registos.xlsx");
-}
-
+            let csvContent = dados.map(e => e.join(";")).join("\n");
+            let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "Registos.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
+
 
 
