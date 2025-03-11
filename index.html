@@ -121,26 +121,44 @@
             }
         }
 
-         function exportarXLS() {
+         <script>
+    function exportarXLS() {
+        // Verifica se a biblioteca XLSX está carregada
+        if (typeof XLSX === 'undefined') {
+            alert("Erro: Biblioteca XLSX não carregada.");
+            return;
+        }
+
+        // Capturar os valores dos inputs
         let dados = [{
-            Data: document.getElementById('data').value,
-            User: document.getElementById('user').value,
-            "Hora Início": document.getElementById('hora_inicio').value,
-            "Hora Fim": document.getElementById('hora_fim').value,
-            Evento: document.getElementById('evento').value,
-            "Tipologia de Evento": document.getElementById('tipo_evento').value,
-            Descrição: document.getElementById('descricao').value,
-            Responsabilidade: document.getElementById('responsabilidade').value,
-            Causa: document.getElementById('causa').value,
-            "Ação Desenvolvida": document.getElementById('acao').value,
-            Observações: document.getElementById('observacoes').value,
-            Equipa: document.getElementById('equipa').value
+            Data: document.getElementById('data')?.value || "",
+            User: document.getElementById('user')?.value || "",
+            "Hora Início": document.getElementById('hora_inicio')?.value || "",
+            "Hora Fim": document.getElementById('hora_fim')?.value || "",
+            Evento: document.getElementById('evento')?.value || "",
+            "Tipologia de Evento": document.getElementById('tipo_evento')?.value || "",
+            Descrição: document.getElementById('descricao')?.value || "",
+            Responsabilidade: document.getElementById('responsabilidade')?.value || "",
+            Causa: document.getElementById('causa')?.value || "",
+            "Ação Desenvolvida": document.getElementById('acao')?.value || "",
+            Observações: document.getElementById('observacoes')?.value || "",
+            Equipa: document.getElementById('equipa')?.value || ""
         }];
 
-        let wb = XLSX.utils.book_new();
-        let ws = XLSX.utils.json_to_sheet(dados);
-        XLSX.utils.book_append_sheet(wb, ws, "Registos");
-        XLSX.writeFile(wb, "Registos.xlsx");
+        console.log("Dados exportados:", dados); // Debug para verificar os dados antes da exportação
+
+        try {
+            let wb = XLSX.utils.book_new();
+            let ws = XLSX.utils.json_to_sheet(dados);
+            XLSX.utils.book_append_sheet(wb, ws, "Registos");
+            XLSX.writeFile(wb, "Registos.xlsx");
+        } catch (error) {
+            console.error("Erro ao exportar XLSX:", error);
+            alert("Erro ao exportar XLSX. Verifique o console.");
+        }
+    }
+</script>
+
         }
     </script>
 </body>
