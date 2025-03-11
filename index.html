@@ -22,10 +22,10 @@
                     <input type="text" id="user">
                     
                     <label for="hora_inicio">Hora Início</label>
-                    <input type="time" id="hora_inicio" step="60" inputmode="numeric">
+                    <input type="text" id="hora_inicio" placeholder="__:__" maxlength="5">
                     
                     <label for="hora_fim">Hora Fim</label>
-                    <input type="time" id="hora_fim" step="60" inputmode="numeric">
+                    <input type="text" id="hora_fim" placeholder="__:__" maxlength="5">
                     
                     <label for="evento">Evento</label>
                     <select id="evento">
@@ -90,33 +90,57 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Função para garantir o formato de 24 horas
-        function garantirFormato24h(input) {
-            input.addEventListener('change', function() {
-                let hora = this.value;
-                if (hora) {
-                    // Converte o valor para o formato de 24 horas
-                    let [hh, mm] = hora.split(':');
-                    hh = parseInt(hh, 10); // Converte para número
-                    if (hh < 10) hh = '0' + hh; // Adiciona zero à esquerda se necessário
-                    this.value = `${hh}:${mm}`; // Define o valor no formato HH:MM
+        // Função para validar o formato de hora (HH:MM)
+        function validarHora(hora) {
+            const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/; // Regex para HH:MM
+            return regex.test(hora);
+        }
+
+        // Função para adicionar a máscara de hora (__:__)
+        function aplicarMascaraHora(input) {
+            input.addEventListener('input', function() {
+                let valor = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+                if (valor.length > 2) {
+                    valor = valor.substring(0, 2) + ':' + valor.substring(2, 4); // Adiciona os dois pontos
+                }
+                this.value = valor;
+            });
+
+            input.addEventListener('blur', function() {
+                if (!validarHora(this.value)) {
+                    alert("Por favor, insira a hora no formato HH:MM.");
+                    this.value = ''; // Limpa o campo se o formato for inválido
                 }
             });
         }
 
-        // Aplicar a função aos campos de hora
-        garantirFormato24h(document.getElementById('hora_inicio'));
-        garantirFormato24h(document.getElementById('hora_fim'));
+        // Aplicar a máscara aos campos de hora
+        aplicarMascaraHora(document.getElementById('hora_inicio'));
+        aplicarMascaraHora(document.getElementById('hora_fim'));
 
         async function salvarDados() {
             let dataInput = document.getElementById('data').value;
             let formattedDate = dataInput ? dataInput.split('-').reverse().join('/') : '';
 
+            // Validar as horas antes de salvar
+            let horaInicio = document.getElementById('hora_inicio').value;
+            let horaFim = document.getElementById('hora_fim').value;
+
+            if (!validarHora(horaInicio) {
+                alert("Por favor, insira a hora de início no formato HH:MM.");
+                return;
+            }
+
+            if (!validarHora(horaFim)) {
+                alert("Por favor, insira a hora de fim no formato HH:MM.");
+                return;
+            }
+
             let registro = {
                 data: formattedDate,
                 user: document.getElementById('user').value,
-                hora_inicio: document.getElementById('hora_inicio').value,
-                hora_fim: document.getElementById('hora_fim').value,
+                hora_inicio: horaInicio,
+                hora_fim: horaFim,
                 evento: document.getElementById('evento').value,
                 tipo_evento: document.getElementById('tipo_evento').value,
                 descricao: document.getElementById('descricao').value,
