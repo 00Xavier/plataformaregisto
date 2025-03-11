@@ -78,8 +78,8 @@
                     </select>
                 </div>
                 <div class="button-row">
-                    <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                    <button type="button" onclick="exportarCSV()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                    <button type="button" id="btnSalvar" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
+                    <button type="button" id="btnExportar" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
                 </div>
             </form>
         </div>
@@ -167,10 +167,13 @@
         function exportarCSV() {
             alert("Função exportarCSV ainda não implementada.");
         }
+
+        // Adicionar eventos aos botões
+        document.getElementById('btnSalvar').addEventListener('click', salvarDados);
+        document.getElementById('btnExportar').addEventListener('click', exportarCSV);
     </script>
 </body>
 </html>
-
 
 
 
