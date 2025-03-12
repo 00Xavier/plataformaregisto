@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+~<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -88,7 +88,7 @@
 
     <script>
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I"";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
@@ -117,13 +117,12 @@
                 console.error("Erro ao salvar:", error);
             } else {
                 alert("Dados salvos com sucesso!");
-                document.getElementById('errorForm').reset(); // Limpar formulário
+                document.getElementById('errorForm').reset();
             }
         }
 
         function exportarXLSX() {
             let dados = [["Data", "User", "Hora Início", "Hora Fim", "Evento", "Tipologia de Evento", "Descrição", "Responsabilidade", "Causa", "Ação Desenvolvida", "Observações", "Equipa"]];
-            
             let linha = [
                 document.getElementById('data').value,
                 document.getElementById('user').value,
@@ -138,7 +137,6 @@
                 document.getElementById('observacoes').value,
                 document.getElementById('equipa').value
             ];
-            
             dados.push(linha);
             let ws = XLSX.utils.aoa_to_sheet(dados);
             let wb = XLSX.utils.book_new();
@@ -148,6 +146,5 @@
     </script>
 </body>
 </html>
-
 
 
