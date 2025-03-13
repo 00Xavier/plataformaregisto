@@ -1,4 +1,4 @@
-~<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -88,7 +88,7 @@
 
     <script>
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
+        const SUPABASE_ANON_KEY = "SEU_SUPABASE_ANON_KEY_AQUI";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
@@ -121,23 +121,39 @@
             }
         }
 
-        function exportarXLSX() {
+        async function exportarXLSX() {
+            let { data, error } = await supabase.from('registos').select('*');
+
+            if (error) {
+                alert("Erro ao buscar dados do Supabase.");
+                console.error("Erro ao buscar dados:", error);
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                alert("Nenhum dado encontrado para exportação.");
+                return;
+            }
+
             let dados = [["Data", "User", "Hora Início", "Hora Fim", "Evento", "Tipologia de Evento", "Descrição", "Responsabilidade", "Causa", "Ação Desenvolvida", "Observações", "Equipa"]];
-            let linha = [
-                document.getElementById('data').value,
-                document.getElementById('user').value,
-                document.getElementById('hora_inicio').value,
-                document.getElementById('hora_fim').value,
-                document.getElementById('evento').value,
-                document.getElementById('tipo_evento').value,
-                document.getElementById('descricao').value,
-                document.getElementById('responsabilidade').value,
-                document.getElementById('causa').value,
-                document.getElementById('acao').value,
-                document.getElementById('observacoes').value,
-                document.getElementById('equipa').value
-            ];
-            dados.push(linha);
+
+            data.forEach(registro => {
+                dados.push([
+                    registro.data,
+                    registro.user,
+                    registro.hora_inicio,
+                    registro.hora_fim,
+                    registro.evento,
+                    registro.tipo_evento,
+                    registro.descricao,
+                    registro.responsabilidade,
+                    registro.causa,
+                    registro.acao,
+                    registro.observacoes,
+                    registro.equipa
+                ]);
+            });
+
             let ws = XLSX.utils.aoa_to_sheet(dados);
             let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Registos");
@@ -146,5 +162,6 @@
     </script>
 </body>
 </html>
+
 
 
