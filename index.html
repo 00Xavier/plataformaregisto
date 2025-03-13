@@ -17,7 +17,7 @@
             <form id="errorForm">
                 <div class="form-row">
                     <label for="data">Data</label>
-                    <input type="date" id="data" pattern="\d{2}/\d{2}/\d{4}" placeholder="dd/mm/yyyy">
+                    <input type="date" id="data">
                     
                     <label for="user">User</label>
                     <input type="text" id="user">
@@ -79,8 +79,8 @@
                     </select>
                 </div>
                 <div class="button-row">
-                    <button type="button" onclick="salvarDados()" style="background: url('submeter.png') no-repeat center; background-size: contain; border: none; width: 200px; height: 60px;"> </button>
-                    <button type="button" onclick="exportarXLSX()" style="background: url('extrair.png') no-repeat center; background-size: contain; border: none; width: 150px; height: 50px;"> </button>
+                    <button type="button" onclick="salvarDados()">Salvar</button>
+                    <button type="button" onclick="exportarXLSX()">Exportar</button>
                 </div>
             </form>
         </div>
@@ -88,15 +88,12 @@
 
     <script>
         const SUPABASE_URL = "https://gcetkkmmyrtbyznslwca.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MDY5OTAzNiwiZXhwIjoyMDU2Mjc1MDM2fQ.DNTKwCOpVmvwPputuiVdrWqHHMX2i_ISEjnT2XSeg5E";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjZXRra21teXJ0Ynl6bnNsd2NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2OTkwMzYsImV4cCI6MjA1NjI3NTAzNn0.4jB1YkQQsp_Iph8CzlT7XQnT20tgnKs1TS-gfQAMa4I";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function salvarDados() {
-            let dataInput = document.getElementById('data').value;
-            let formattedDate = dataInput ? dataInput.split('-').reverse().join('/') : '';
-
             let registro = {
-                data: formattedDate,
+                data: document.getElementById('data').value,
                 user: document.getElementById('user').value,
                 hora_inicio: document.getElementById('hora_inicio').value,
                 hora_fim: document.getElementById('hora_fim').value,
@@ -113,7 +110,7 @@
             let { data, error } = await supabase.from('registos').insert([registro]);
 
             if (error) {
-                alert("Erro ao salvar os dados. Verifique o console para mais detalhes.");
+                alert("Erro ao salvar os dados.");
                 console.error("Erro ao salvar:", error);
             } else {
                 alert("Dados salvos com sucesso!");
@@ -130,31 +127,7 @@
                 return;
             }
 
-            if (!data || data.length === 0) {
-                alert("Nenhum dado encontrado para exportação.");
-                return;
-            }
-
-            let dados = [["Data", "User", "Hora Início", "Hora Fim", "Evento", "Tipologia de Evento", "Descrição", "Responsabilidade", "Causa", "Ação Desenvolvida", "Observações", "Equipa"]];
-
-            data.forEach(registro => {
-                dados.push([
-                    registro.data,
-                    registro.user,
-                    registro.hora_inicio,
-                    registro.hora_fim,
-                    registro.evento,
-                    registro.tipo_evento,
-                    registro.descricao,
-                    registro.responsabilidade,
-                    registro.causa,
-                    registro.acao,
-                    registro.observacoes,
-                    registro.equipa
-                ]);
-            });
-
-            let ws = XLSX.utils.aoa_to_sheet(dados);
+            let ws = XLSX.utils.json_to_sheet(data);
             let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Registos");
             XLSX.writeFile(wb, "Registos.xlsx");
@@ -162,6 +135,7 @@
     </script>
 </body>
 </html>
+
 
 
 
