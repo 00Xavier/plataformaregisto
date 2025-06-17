@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registo Erros Teletrabalho</title>
+    <title>Registo Formações</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -11,71 +11,81 @@
 <body>
     <div class="container">
         <header>
-            <h1>REGISTO ERROS TELETRABALHO</h1>
+            <h1>REGISTO DE FORMAÇÕES</h1>
         </header>
         <div class="form-container">
-            <form id="errorForm">
+            <form id="formacaoForm">
                 <div class="form-row">
-                    <label for="data">Data</label>
-                    <input type="date" id="data">
-                    
                     <label for="user">User</label>
-                    <input type="text" id="user">
+                    <input type="text" id="user" placeholder="Nome do formando">
                     
-                    <label for="hora_inicio">Hora Início</label>
-                    <input type="text" id="hora_inicio" placeholder="__:__">
+                    <label for="data_inicio">Data Início</label>
+                    <input type="date" id="data_inicio">
                     
-                    <label for="hora_fim">Hora Fim</label>
-                    <input type="text" id="hora_fim" placeholder="__:__">
+                    <label for="data_fim">Data Fim</label>
+                    <input type="date" id="data_fim">
                     
-                    <label for="evento">Evento</label>
-                    <select id="evento">
+                    <label for="formacao">Formação</label>
+                    <input type="text" id="formacao" placeholder="Nome da formação">
+                    
+                    <label for="tipo_acao">Tipo de Ação</label>
+                    <select id="tipo_acao">
                         <option value="" selected disabled>Selecione...</option>
-                        <option value="Aplicações">Aplicações</option>
-                        <option value="OneAgentWeb">OneAgentWeb</option>
-                        <option value="Luz">Luz</option>
-                        <option value="Internet">Internet</option>
-                        <option value="PC">PC</option>
-                        <option value="VDI">VDI</option>
+                        <option value="Atendimento Acompanhado">Atendimento Acompanhado</option>
+                        <option value="Briefing">Briefing</option>
+                        <option value="Briefing Polivalência">Briefing Polivalência</option>
+                        <option value="Coaching">Coaching</option>
+                        <option value="Formação on job">Formação on job</option>
+                        <option value="Formação Sala">Formação Sala</option>
+                        <option value="Side by side">Side by side</option>
                     </select>
-                    
-                    <label for="tipo_evento">Tipologia de Evento</label>
-                    <input type="text" id="tipo_evento">
                 </div>
                 <div class="form-row">
                     <label for="descricao">Descrição</label>
-                    <input type="text" id="descricao">
+                    <input type="text" id="descricao" placeholder="Descrição da formação">
                     
-                    <label for="responsabilidade">Responsabilidade</label>
-                    <select id="responsabilidade">
+                    <label for="metodologia">Metodologia</label>
+                    <input type="text" id="metodologia" placeholder="Metodologia utilizada">
+                    
+                    <label for="entidade">Entidade</label>
+                    <select id="entidade">
                         <option value="" selected disabled>Selecione...</option>
-                        <option value="User">User</option>
-                        <option value="PC">PC</option>
-                        <option value="NSS">NSS</option>
-                        <option value="FID">FID</option>
-                        <option value="N/a">N/a</option>
+                        <option value="Área Técnica">Área Técnica</option>
+                        <option value="Entidade Externa">Entidade Externa</option>
+                        <option value="M-Learning">M-Learning</option>
+                        <option value="Newspring - Operativa">Newspring - Operativa</option>
                     </select>
                     
-                    <label for="causa">Causa</label>
-                    <input type="text" id="causa">
+                    <label for="formador">Formador</label>
+                    <input type="text" id="formador" placeholder="Nome do formador">
                     
-                    <label for="acao">Ação Desenvolvida</label>
-                    <input type="text" id="acao">
+                    <label for="horas">Nº de horas</label>
+                    <input type="number" id="horas" placeholder="Horas de formação">
                     
-                    <label for="observacoes">Observações</label>
-                    <input type="text" id="observacoes">
-                    
-                    <label for="equipa">Equipa</label>
-                    <select id="equipa">
+                    <label for="mes">Mês</label>
+                    <select id="mes">
                         <option value="" selected disabled>Selecione...</option>
-                        <option value="AT">AT</option>
-                        <option value="AU">AU</option>
-                        <option value="CL">CL</option>
-                        <option value="DG">DG</option>
-                        <option value="DT">DT</option>
-                        <option value="MR">MR</option>
-                        <option value="MT">MT</option>
-                        <option value="VE">VE</option>
+                        <option value="Janeiro">Janeiro</option>
+                        <option value="Fevereiro">Fevereiro</option>
+                        <option value="Março">Março</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Maio">Maio</option>
+                        <option value="Junho">Junho</option>
+                        <option value="Julho">Julho</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Setembro">Setembro</option>
+                        <option value="Outubro">Outubro</option>
+                        <option value="Novembro">Novembro</option>
+                        <option value="Dezembro">Dezembro</option>
+                    </select>
+                    
+                    <label for="ano">Ano</label>
+                    <select id="ano">
+                        <option value="" selected disabled>Selecione...</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
                     </select>
                 </div>
                 <div class="button-row">
@@ -93,33 +103,33 @@
 
         async function salvarDados() {
             let registro = {
-                data: document.getElementById('data').value,
                 user: document.getElementById('user').value,
-                hora_inicio: document.getElementById('hora_inicio').value,
-                hora_fim: document.getElementById('hora_fim').value,
-                evento: document.getElementById('evento').value,
-                tipo_evento: document.getElementById('tipo_evento').value,
+                data_inicio: document.getElementById('data_inicio').value,
+                data_fim: document.getElementById('data_fim').value,
+                formacao: document.getElementById('formacao').value,
+                tipo_acao: document.getElementById('tipo_acao').value,
                 descricao: document.getElementById('descricao').value,
-                responsabilidade: document.getElementById('responsabilidade').value,
-                causa: document.getElementById('causa').value,
-                acao: document.getElementById('acao').value,
-                observacoes: document.getElementById('observacoes').value,
-                equipa: document.getElementById('equipa').value
+                metodologia: document.getElementById('metodologia').value,
+                entidade: document.getElementById('entidade').value,
+                formador: document.getElementById('formador').value,
+                horas: document.getElementById('horas').value,
+                mes: document.getElementById('mes').value,
+                ano: document.getElementById('ano').value
             };
 
-            let { error } = await supabase.from('registos').insert([registro]);
+            let { error } = await supabase.from('registos_formacoes').insert([registro]);
 
             if (error) {
                 alert("Erro ao salvar os dados.");
                 console.error("Erro ao salvar:", error);
             } else {
                 alert("Dados salvos com sucesso!");
-                document.getElementById('errorForm').reset();
+                document.getElementById('formacaoForm').reset();
             }
         }
 
         async function exportarXLSX() {
-            let { data, error } = await supabase.from('registos').select('*');
+            let { data, error } = await supabase.from('registos_formacoes').select('*');
 
             if (error) {
                 alert("Erro ao buscar dados do Supabase.");
@@ -129,12 +139,11 @@
 
             let ws = XLSX.utils.json_to_sheet(data);
             let wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Registos");
-            XLSX.writeFile(wb, "Registos.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "RegistosFormacoes");
+            XLSX.writeFile(wb, "RegistosFormacoes.xlsx");
         }
     </script>
 </body>
 </html>
-
 
 
